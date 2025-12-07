@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Admin User",
+        "email": "admin@scholarstream.com",
+        "photoURL": "https://ui-avatars.com/api/?name=Admin+User&background=random",
+        "role": "admin"
+    },
+    {
+        "name": "Moderator User",
+        "email": "moderator@scholarstream.com",
+        "photoURL": "https://ui-avatars.com/api/?name=Moderator+User&background=random",
+        "role": "moderator"
+    },
+    {
+        "name": "Student One",
+        "email": "student1@example.com",
+        "photoURL": "https://ui-avatars.com/api/?name=Student+One&background=random",
+        "role": "user"
+    },
+    {
+        "name": "Student Two",
+        "email": "student2@example.com",
+        "photoURL": "https://ui-avatars.com/api/?name=Student+Two&background=random",
+        "role": "user"
+    }
+]
