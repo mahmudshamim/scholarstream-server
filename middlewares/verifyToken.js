@@ -22,7 +22,7 @@ const verifyAdmin = async (req, res, next) => {
     const db = getDB();
     const query = { email: email };
     const user = await db.collection("users").findOne(query);
-    const isAdmin = user?.role === 'admin';
+    const isAdmin = user?.role === 'Admin';
     if (!isAdmin) {
         return res.status(403).send({ message: 'forbidden access' });
     }
@@ -35,7 +35,7 @@ const verifyModerator = async (req, res, next) => {
     const db = getDB();
     const query = { email: email };
     const user = await db.collection("users").findOne(query);
-    const isModerator = user?.role === 'moderator' || user?.role === 'admin'; // Admin can also act as mod usually, or strictly mod
+    const isModerator = user?.role === 'Moderator' || user?.role === 'Admin'; // Admin can also act as moderator
     if (!isModerator) {
         return res.status(403).send({ message: 'forbidden access' });
     }
