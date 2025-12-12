@@ -10,6 +10,8 @@ const applicationRoutes = require('./routes/applicationRoutes');
 const analyticsReviewRoutes = require('./routes/analyticsReviewRoutes');
 
 const app = express();
+const PORT = process.env.PORT || 8080;
+
 app.use(cors({
     origin: [
         "http://localhost:5173",
