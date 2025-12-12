@@ -10,15 +10,13 @@ const applicationRoutes = require('./routes/applicationRoutes');
 const analyticsReviewRoutes = require('./routes/analyticsReviewRoutes');
 
 const app = express();
-const PORT = process.env.PORT || 8080;
-
-// Middleware
 app.use(cors({
     origin: [
         "http://localhost:5173",
         "http://localhost:5174",
         "https://scholarstream.web.app",
-        "https://scholarstream.firebaseapp.com"
+        "https://scholarstream.firebaseapp.com",
+        "https://scholarstream-29f72.web.app"
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
