@@ -62,19 +62,27 @@ const getUserByEmail = async (req, res, next) => {
     try {
         const db = getDB();
         const email = req.params.email;
-        if (email !== req.decoded.email) {
+        console.log(`[Backend Log] getUserByEmail called. Param: ${email}, Decoded: ${req.decoded.email}`);
+
+        if (email.toLowerCase() !== req.decoded.email.toLowerCase()) {
+            console.log(`[Backend Log] Forbidden: Email mismatch. ${email.toLowerCase()} vs ${req.decoded.email.toLowerCase()}`);
             return res.status(403).send({ message: 'forbidden access' });
         }
-        const query = { email: email };
+        const query = { email: email.toLowerCase() };
+        console.log(`[Backend Log] Querying DB with:`, query);
+
         const user = await db.collection(USERS_COLLECTION).findOne(query);
+        console.log(`[Backend Log] DB Result:`, user ? 'User Found' : 'User Not Found', user?.role);
+
         let isAdmin = false;
         let isModerator = false;
         if (user) {
-            isAdmin = user?.role === 'admin';
-            isModerator = user?.role === 'moderator';
+            isAdmin = user?.role?.toLowerCase() === 'admin';
+            isModerator = user?.role?.toLowerCase() === 'moderator';
         }
         res.send({ ...user, admin: isAdmin, moderator: isModerator });
     } catch (error) {
+        console.error('[Backend Log] Error in getUserByEmail:', error);
         next(error);
     }
 }
@@ -84,10 +92,10 @@ const getAdminStatus = async (req, res, next) => {
     try {
         const db = getDB();
         const email = req.params.email;
-        if (email !== req.decoded.email) {
+        if (email.toLowerCase() !== req.decoded.email.toLowerCase()) {
             return res.status(403).send({ message: 'forbidden access' });
         }
-        const query = { email: email };
+        const query = { email: email.toLowerCase() };
         const user = await db.collection(USERS_COLLECTION).findOne(query);
         let isAdmin = false;
         if (user) {
@@ -103,10 +111,10 @@ const getModeratorStatus = async (req, res, next) => {
     try {
         const db = getDB();
         const email = req.params.email;
-        if (email !== req.decoded.email) {
+        if (email.toLowerCase() !== req.decoded.email.toLowerCase()) {
             return res.status(403).send({ message: 'forbidden access' });
         }
-        const query = { email: email };
+        const query = { email: email.toLowerCase() };
         const user = await db.collection(USERS_COLLECTION).findOne(query);
         let isModerator = false;
         if (user) {

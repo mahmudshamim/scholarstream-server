@@ -20,10 +20,16 @@ const verifyToken = (req, res, next) => {
 const verifyAdmin = async (req, res, next) => {
     const email = req.decoded.email;
     const db = getDB();
-    const query = { email: email };
+    const query = { email: email.toLowerCase() };
+    console.log(`[Middleware] verifyAdmin checking:`, query.email);
+
     const user = await db.collection("users").findOne(query);
-    const isAdmin = user?.role === 'Admin';
+    const isAdmin = user?.role?.toLowerCase() === 'admin';
+
+    console.log(`[Middleware] Admin Check Result: ${isAdmin}, Role found: ${user?.role}`);
+
     if (!isAdmin) {
+        console.log(`[Middleware] Access Forbidden for ${email}`);
         return res.status(403).send({ message: 'forbidden access' });
     }
     next();
@@ -33,9 +39,9 @@ const verifyAdmin = async (req, res, next) => {
 const verifyModerator = async (req, res, next) => {
     const email = req.decoded.email;
     const db = getDB();
-    const query = { email: email };
+    const query = { email: email.toLowerCase() };
     const user = await db.collection("users").findOne(query);
-    const isModerator = user?.role === 'Moderator' || user?.role === 'Admin'; // Admin can also act as moderator
+    const isModerator = user?.role?.toLowerCase() === 'moderator' || user?.role?.toLowerCase() === 'admin';
     if (!isModerator) {
         return res.status(403).send({ message: 'forbidden access' });
     }

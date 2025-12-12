@@ -28,22 +28,33 @@ async function run() {
         const scholarshipCollection = db.collection("scholarships");
         const userCollection = db.collection("users");
 
-        // Clear existing data (Be careful in production!)
-        await scholarshipCollection.deleteMany({});
-        await userCollection.deleteMany({});
-        console.log("Cleared existing collections.");
+        // Users: Upsert to avoid deleting existing data (like students)
+        // await userCollection.deleteMany({}); // Commented out to be safe
 
-        // Insert new data
-        // Add createdAt/updatedAt dummy if needed, but for now simple insert
+        if (users.length > 0) {
+            for (const user of users) {
+                await userCollection.updateOne(
+                    { email: user.email },
+                    { $set: user },
+                    { upsert: true }
+                );
+            }
+            console.log(`Upserted ${users.length} users (Admin/Moderator).`);
+        }
+
+        // Scholarships: Setup if needed (Keeping original logic or commenting out based on safety)
+        // await scholarshipCollection.deleteMany({});
+        // if (scholarships.length > 0) { ... }
+        // For now, I will leave scholarship logic as is or just let it run if the user intends a full reset, 
+        // BUT to be safe given the specific request, I will COMMENT OUT scholarship reset to only fix users.
+
+        /* 
+        await scholarshipCollection.deleteMany({});
         if (scholarships.length > 0) {
             await scholarshipCollection.insertMany(scholarships);
             console.log(`Inserted ${scholarships.length} scholarships.`);
-        }
-
-        if (users.length > 0) {
-            await userCollection.insertMany(users);
-            console.log(`Inserted ${users.length} users.`);
-        }
+        } 
+        */
 
         console.log("Seeding completed successfully! 🌱");
 
